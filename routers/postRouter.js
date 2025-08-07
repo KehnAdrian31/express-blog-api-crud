@@ -14,7 +14,7 @@ router.get('/', postController.index);
 router.get('/:id', req, postController.show);
 
 //definizione della rotta store
-router.post('/', postController.show);
+router.post('/', postController.store);
 
 //definizione della rotta update
 router.put('/:id', postController.update);
