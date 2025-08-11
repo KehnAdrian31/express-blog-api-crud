@@ -34,13 +34,48 @@ const show = (req, res) => {
 
 //store
 const store = (req, res) => {
-  res.send(`Creazione di un nuovo post`);
+  // definisco l ' id del nuovo oggetto da inserire nell ' array
+  const newId = posts[posts.length -1].id + 1;
+
+  // recupero i dati del body della richiesta
+  const { title, content, image , tags} = req.body;
+
+  // creo il nuovo oggetto
+  const newPost = {
+    id: newId,
+    title,
+    content,
+    image,
+    tags
+  }
+
+  //pusho il nuovo oggetto nell' array
+  posts.push(newPost);
+
+  res.status(201).json(newPost);
 }
 
 // update
 const update = (req, res) => {
-  const id = req.params.id
-  res.send(`Modifica totale del post con id ${id}`);
+  const id = parseInt(req.params.id)
+
+  //recupero i dati passati tramite il body della richiesta
+  const {title, content, image, tags} = req.body
+
+  //recupero il post con l' id passato come parametro 
+  const post = posts.find(item => item.id === id);
+
+  //bonus: se non è stato trovato il post, restituire un messaggio di errore 404
+  if(!post){
+    return res.status(404).json({error: "404 Not found", message: "Post non trovato"})
+  }
+
+  post.title = title;
+  post.content = content;
+  post.image = image;
+  post.tags = tags 
+
+  req.send(post);
 }
 
 //modify
@@ -52,9 +87,6 @@ const modify = (req, res) => {
 //destroy
 const destroy = (req, res) => {
   const id = parseInt(req.params.id);
-
-  // recupero il post 
-  const post = posts.find(item => item.id === id);
 
    //verifico se post non esiste
   if(!post){
